@@ -147,7 +147,7 @@ bool alarm_is_set(Alarm *alarm)
   // alarm is set if it doesn't have the default settings
   bool retval=alarm->enabled || alarm->hour || alarm->minute || alarm_has_description(alarm);
   for (int i=0; i<7; i++) {
-    retval = retval || !alarm->weekdays_active[i];
+    retval = retval || alarm->weekdays_active[i];
   }
   return retval;
 }
@@ -170,7 +170,7 @@ void alarm_reset(Alarm *alarm)
   alarm->alarm_id=-1;
   alarm->description[0]=0;
   for (int weekday=0; weekday<7;weekday++)
-    alarm->weekdays_active[weekday]=true;
+    alarm->weekdays_active[weekday]=false;
 #ifndef PBL_PLATFORM_APLITE
   alarm->smart_alarm_minutes=0;
 #endif

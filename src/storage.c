@@ -55,6 +55,23 @@ void load_persistent_storage_alarms(Alarm *alarms)
   }
   APP_LOG(APP_LOG_LEVEL_DEBUG,"Size of one alarm struct: %d",sizeof(Alarm));
 #endif
+  // One-time migration: unused slots saved with the old default (all weekdays)
+  // become one-time alarms, matching the new default in alarm_reset.
+  if (!persist_exists(ONE_TIME_DEFAULT_MIGRATED_KEY)) {
+    for (int i=0; i<NUM_ALARMS; i++) {
+      Alarm *alarm = &alarms[i];
+      bool all_days = true;
+      for (int w=0; w<7; w++)
+        all_days = all_days && alarm->weekdays_active[w];
+      if (all_days && !alarm->enabled && alarm->hour==0 && alarm->minute==0 &&
+          alarm->description[0]==0) {
+        for (int w=0; w<7; w++)
+          alarm->weekdays_active[w] = false;
+      }
+    }
+    write_persistent_storage_alarms(alarms);
+    persist_write_bool(ONE_TIME_DEFAULT_MIGRATED_KEY, true);
+  }
 }
 
 void write_persistent_storage_alarms(Alarm *alarms)

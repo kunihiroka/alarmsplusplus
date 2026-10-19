@@ -85,7 +85,7 @@ static Alarm temp_alarm;
 static Alarm *current_alarm;
 
 #ifndef PBL_PLATFORM_APLITE
-#include "pebble-ui-dialog-window/pebble-ui-dialog-window.h"
+#include "ui_dialog_window.h"
 UIDialogWindow* ui_dialog;
 #ifdef PBL_ROUND
 char* ui_dialog_message = "       Voice        dictation not available, falling back to standard text input. Press back to continue.";

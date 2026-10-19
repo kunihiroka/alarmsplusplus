@@ -69,7 +69,7 @@ void locale_init(void) {
 char *locale_str(int hashval) { 
   Tuple *tupl = dict_find(&s_locale_dict, hashval);
 
-  if (tupl && tupl->value->cstring) {
+  if (tupl) {
     return tupl->value->cstring;
   }
   return "\7"; //return blank character
